@@ -175,3 +175,6 @@ cython_debug/
 
 # Ignore local db log file
 log/db_log.txt
+
+# Ignore database config file(s)
+configs/*.ini
