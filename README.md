@@ -6,6 +6,7 @@ Author: Michael Mendes
 - Start Postgres server: pg_ctl start -l log/db_log.txt
   - **Note**: The `PGDATA` environment variable must be set, or this command must be run with `-D /path/to/postgres/data`
 - Stop Postgres server: pg_ctl stop -m smart
+- Connect to database via command line: psql -U postgres
 
 ### Environment Variables
 | Name   | Description |
