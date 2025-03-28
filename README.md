@@ -8,6 +8,21 @@ Author: Michael Mendes
 - Stop Postgres server: pg_ctl stop -m smart
 - Connect to database via command line: psql -U postgres
 
+### Run Project Locally
+**Note**: Please ensure you have installed PostgreSQL before following these instructions.
+1. Create two folders called `configs` and `log` in the root repository.
+2. Use the *Start Postgres Server* command listed above to start your PostgreSQL server.
+3. In the `configs` folder create a file called `database.ini`.
+4. In this file, enter your database connection information in the following format:
+    ```ini
+    [postgresql]
+    host=localhost
+    database=YOUR_DATABASE
+    user=YOUR_USERNAME
+    password=YOUR_PASSWORD
+    ```
+5. To be continued...
+ 
 ### Environment Variables
 | Name   | Description |
 | ------ | ----------- |
