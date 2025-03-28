@@ -1,45 +1,7 @@
-import pandas as pd
-import psycopg2 as pg
-from connect import connect
-
-# Define a function that will take in relevant data from SCHEMA.csv files and create tables
-# TODO: Move this function and some logic in main to new file to handle table creation separately
-def create_sql_query(table_name, group):
-    columns = ''
-    for index, row in group.iterrows():
-      column_name = row['COLUMN_NAME']
-      data_type = row['DATA_TYPE']
-      if(index == len(group) - 1):
-        columns += (f'{column_name} {data_type}')
-      else:
-        columns += (f'{column_name} {data_type}, ')
-
-    create_query = f'CREATE TABLE {table_name} ({columns})'
-    return create_query
+from create_tables import create_tables
 
 def main():
-   # Loading in schema data to spin up tables
-  tables_df = pd.read_csv('./data/INFORMATION_SCHEMA.csv', sep=',', quotechar='"', skipinitialspace=True)
-  grouped_df = tables_df.groupby('TABLE_NAME')
-  create_queries = []
-
-  for table_name, group in grouped_df:
-      group = group.sort_values(by='ORDINAL_POSITION')
-      group = group.reset_index(drop=True)
-      create_queries.append(create_sql_query(table_name, group))
-  
-  conn = connect()
-  cur = conn.cursor()
-  for query in create_queries:
-    print(query)
-    try:
-      cur.execute(query)
-    except(Exception, pg.Error) as error:
-      print(error)
-  cur.close()
-  conn.commit()
-  if conn is not None:
-     conn.close()
+  pass
      
 
 if __name__ == '__main__':
