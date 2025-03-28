@@ -1,34 +1,46 @@
 import pandas as pd
 import psycopg2 as pg
-from config import load_config
-
-def connect(config):
-  try:
-    # Attempt connection to PostreSQL server
-    print(config)
-    with pg.connect(**config) as conn:
-      print('Connected to the PostgreSQL server')
-      return conn
-  except (pg.DatabaseError, Exception) as error:
-    print(error)
+from connect import connect
 
 # Define a function that will take in relevant data from SCHEMA.csv files and create tables
-def create_table():
-    config = load_config()
-    # Just testing db connections for now
-    with connect(config) as conn:
-        print(conn.status)
-        pass
+# TODO: Move this function and some logic in main to new file to handle table creation separately
+def create_sql_query(table_name, group):
+    columns = ''
+    for index, row in group.iterrows():
+      column_name = row['COLUMN_NAME']
+      data_type = row['DATA_TYPE']
+      if(index == len(group) - 1):
+        columns += (f'{column_name} {data_type}')
+      else:
+        columns += (f'{column_name} {data_type}, ')
+
+    create_query = f'CREATE TABLE {table_name} ({columns})'
+    return create_query
 
 def main():
    # Loading in schema data to spin up tables
   tables_df = pd.read_csv('./data/INFORMATION_SCHEMA.csv', sep=',', quotechar='"', skipinitialspace=True)
+  grouped_df = tables_df.groupby('TABLE_NAME')
+  create_queries = []
 
-  for index, row in tables_df.iterrows():
-      #print(row['TABLE_NAME'] + ' ' + row['TABLE_SCHEMA'] + ' ' + str(row['ORDINAL_POSITION']) + ' ' + row['COLUMN_NAME'] + ' ' + row['DATA_TYPE'])
-      pass
-
-  create_table()
+  for table_name, group in grouped_df:
+      group = group.sort_values(by='ORDINAL_POSITION')
+      group = group.reset_index(drop=True)
+      create_queries.append(create_sql_query(table_name, group))
+  
+  conn = connect()
+  cur = conn.cursor()
+  for query in create_queries:
+    print(query)
+    try:
+      cur.execute(query)
+    except(Exception, pg.Error) as error:
+      print(error)
+  cur.close()
+  conn.commit()
+  if conn is not None:
+     conn.close()
+     
 
 if __name__ == '__main__':
    main()
