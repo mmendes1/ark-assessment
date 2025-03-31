@@ -1,11 +1,11 @@
 from create_tables import create_tables
 from copy_data import copy_data, get_data_file_names
-from answers import overdrawn_checking, overpaid_loans
+from answers import overdrawn_checking, overpaid_loans, asset_total
 
 def main():
     overdrawn_checking()
     overpaid_loans()
-
+    asset_total()
     # This is all to make the db tables and load data
     # create_tables()
     #files = get_data_file_names()
