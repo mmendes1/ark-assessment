@@ -1,10 +1,12 @@
 from configparser import ConfigParser
 
+# Function that reads a config file for the database connection and returns said config
 def load_config(filename='database.ini', section='postgresql'):
   parser = ConfigParser()
   parser.read('./configs/' + filename)
 
   config={}
+  # Make sure config parser has data to read, then load the params from the data and save to the config object
   if parser.has_section(section):
       params = parser.items(section)
       for param in params:

@@ -39,7 +39,7 @@ def copy_data(files):
         # Why does this need to be set to true for changes to take effect?
         conn.autocommit = True
         cur = conn.cursor()
-    # Fetch column names
+        # Fetch column names
         for file in files:
             file_path = path + file
             table_name = file.replace('.csv', '')
