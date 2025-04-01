@@ -21,7 +21,8 @@ Author: Michael Mendes
     user=YOUR_USERNAME
     password=YOUR_PASSWORD
     ```
-5. To be continued...
+5. Install all dependencies listed in `requirements.txt`
+6. Run `main.py` after the database has started.
  
 ### Environment Variables
 | Name   | Description |
